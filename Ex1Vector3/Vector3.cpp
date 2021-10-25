@@ -1,14 +1,14 @@
 #include "Vector3.h"
 #include "Globals.h"
 
-
+#define EPSILON 1e-5 //para no comparar con 0 y arriesgarnos a un error de div/0
 
 template<typename T>
 Vec3<T>::Vec3()
 {
-	vector[0] = 0;
-	vector[1] = 0;
-	vector[2] = 0;
+	vector[0] = T(0); // casting el valor inicial 0 al tipo del template
+	vector[1] = T(0);
+	vector[2] = T(0);
 }
 
 template<typename T>
@@ -33,25 +33,25 @@ Vec3<T>::~Vec3()
 }
 
 template<typename T>
-Vec3<T> Vec3<T>::Normalize()
+Vec3<T> Vec3<T>::Normalized()
 {
 	float l = length();
-	Vec3 w(vector[0] / l, vector[1] / l, vector[2] / l);
+	Vec3 w(vector[0] / l, vector[1] / l, vector[2] / l); // Division expensive, do inverse multiplication
 	return w;
 }
 
 template<typename T>
-float Vec3<T>::distance_to(Vec3 u)
+float Vec3<T>::distance_to(const Vec3& u)
 {
 	float distance_to = 0.0f;
-	distance_to = sqrt(pow((vector[0] - u.vector[0]), 2) + pow((vector[1] - u.vector[1]), 2) + pow((vector[2] - u.vector[2]), 2));
+	distance_to = sqrt(pow((vector[0] - u.vector[0]), 2) + pow((vector[1] - u.vector[1]), 2) + pow((vector[2] - u.vector[2]), 2)); //POW function expensive in comput
 	return distance_to;
 }
 
 
 
 template<typename T>
-float Vec3<T>::dot_product(Vec3 u)
+T Vec3<T>::dot_product(const Vec3& u)
 {
 	float product = 0.0f;
 	product = ((vector[0]*u.vector[0]) + (vector[1] * u.vector[1]) + (vector[2] * u.vector[2]));
@@ -59,7 +59,7 @@ float Vec3<T>::dot_product(Vec3 u)
 }
 
 template<typename T>
-Vec3<T> Vec3<T>::cross_product(Vec3 u)
+Vec3<T> Vec3<T>::cross_product(const Vec3& u)
 {
 	Vec3 w(vector[1] * u.vector[2] - vector[2] * u.vector[1], vector[2] * u.vector[0] - vector[0] * u.vector[2], vector[0] * u.vector[1] - vector[1] * u.vector[0]);
 	return w;
@@ -68,10 +68,10 @@ Vec3<T> Vec3<T>::cross_product(Vec3 u)
 
 
 template<typename T>
-float Vec3<T>::angle_between(Vec3 u)
+float Vec3<T>::angle_between(const Vec3& u)
 {
 	float angle = 0.0f;
-	angle = acos(dot_product(u) / (length()* u.length()));
+	angle = acos(dot_product(u) / (length()* u.length())); // Division expensive, do inverse multiplication
 	angle *= (180 / M_PI);
 	return angle;
 }

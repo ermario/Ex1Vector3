@@ -4,7 +4,7 @@
 void main() {
 
 	Vec3<float> a(5, 5, 5);
-	Vec3<float> x(a.Normalize());
+	Vec3<float> x(a.Normalized());
 	x.getV(); // CHECK NORMALIZE FUNCTION
 
 	Vec3<float> b(1, 0, 5);
